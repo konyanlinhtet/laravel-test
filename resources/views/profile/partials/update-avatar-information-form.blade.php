@@ -1,4 +1,10 @@
+<div class=" text-blue-500">{{ auth()->user()->name }}</div>
+<div class=" text-red-500">{{ auth()->user()->avatar }}</div>
+
+
+
 <section>
+
     <header>
         <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
            Avatar Imformation
@@ -9,7 +15,7 @@
         </p>
     </header>
 
-
+    <img src="{{ "storage/$user->avatar" }}"  alt="" srcset="">
 
     <form method="post" action="{{ route('profile.avatar.update') }}" class="mt-6 space-y-6" enctype="multipart/form-data">
         @csrf
