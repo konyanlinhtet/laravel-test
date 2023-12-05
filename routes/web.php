@@ -1,11 +1,17 @@
 <?php
 
 use App\Models\User;
+use GuzzleHttp\Psr7\Uri;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use OpenAI\Laravel\Facades\OpenAI;
 // use Symfony\Component\Routing\Route;
+use OpenAI\Laravel\Facades\OpenAI;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TestController;
+use Illuminate\Support\Facades\Redirect;
+use App\Http\Controllers\PhotoController;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\ProvisionServer;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Profile\AvatarController;
 
@@ -114,4 +120,26 @@ require __DIR__.'/auth.php';
 //     return $user->email;
 // });
 
-//
+//Soft Deleted Models
+// Route::get('/users/{user:name}', function (User $user) {
+//     return $user->email;
+// })->withTrashed();
+// Route::get('/users/{user}/posts/{post}', function (User $user, Email $email) {
+//     return $email;
+// })->scopeBindings();
+// Route::get('/users/{user:name}', function (User $user) {
+//     return $user->email;
+// });
+
+    Route::get('/users/{user:name}', function (User $user) {
+        $route = Route::current();
+      return "HI";
+}) ->middleware("ensureRole:user");
+
+Route::get("/test2", [TestController::class , "middlewareTest"]);
+Route::get('/posts/popular', [PostController::class, 'popular']);
+Route::resource('posts', PostController::class)->missing(function (Request $request) {
+    return Redirect::route('posts.index');
+});;
+
+
