@@ -6,11 +6,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 // use Symfony\Component\Routing\Route;
 use OpenAI\Laravel\Facades\OpenAI;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Cookie;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Controllers\PhotoController;
-use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProvisionServer;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Profile\AvatarController;
@@ -134,12 +136,49 @@ require __DIR__.'/auth.php';
     Route::get('/users/{user:name}', function (User $user) {
         $route = Route::current();
       return "HI";
-}) ->middleware("ensureRole:user");
+})->name("users");
 
 Route::get("/test2", [TestController::class , "middlewareTest"]);
 Route::get('/posts/popular', [PostController::class, 'popular']);
 Route::resource('posts', PostController::class)->missing(function (Request $request) {
     return Redirect::route('posts.index');
-});;
+});
+Route::get('/test3/testing/', function(Request $request){
+    return response()->download('https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_640.jpg');
+});
+Route::get('/test4', function () {
+    // return response('Hello World', 200)
+    return response("helo", 200)->withHeaders([
+        'Content-Type' => "application/json",
+        'X-Header-One' => 'Header Value',
+        'X-Header-Two' => 'Header Value',
+    ]);
+});
+Route::middleware('cache.headers:public;max_age=2628000;etag')->group(function () {
+    Route::get('/privacy', function () {
+       return response("privacy", 200);
+    });
 
 
+});
+
+Route::get('/test5/{user}', function (User $user) {
+    return $user;
+});
+Route::get('/terms', function () {
+    Cookie::queue('name', 'Nyan', 60);
+    return response('Hello World');
+});
+
+Route::get('/test6', function () {
+    // $users = User::all();
+    $user = Auth::user();
+    // dd($user);
+    return redirect()->route('users', [ $user->name]);
+});
+Route::get('/test7', function () {
+    return view("test");
+})->name("test7");
+
+
+request

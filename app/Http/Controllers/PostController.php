@@ -30,6 +30,9 @@ class PostController extends Controller
     public function store(Request $request)
     {
         //
+        // $request->flash();
+        // return back()->withInput();
+        dd($request->photo->extension());
     }
 
     /**

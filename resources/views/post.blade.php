@@ -7,11 +7,15 @@
     <title>Document</title>
 </head>
 <body>
-    <form action="" method="post">
+    <form action="{{ route("posts.store") }}" method="post" enctype="multipart/form-data">
+        @csrf
         <label for="">Title</label>
-        <input type="text" name="title" id="">
+        <input type="text" name="title" id=""  value="{{ old('title') }}">
         <label for="">Description</label>
-        <textarea name="description" id="" cols="10" rows="10"></textarea>
+        <textarea name="description" id="" cols="10" rows="10">{{ old("description") }}</textarea>
+        <label for="">photo</label>
+        <input type="file" name="photo" id="">
+        <button type="submit">Submit</button>
     </form>
 </body>
 </html>
